@@ -3,7 +3,7 @@ package com.example.highload.services.impl;
 import com.example.highload.model.enums.ImageObjectType;
 import com.example.highload.model.inner.Image;
 import com.example.highload.model.inner.ImageObject;
-import com.example.highload.model.inner.Order;
+import com.example.highload.model.inner.ClientOrder;
 import com.example.highload.model.inner.Profile;
 import com.example.highload.model.network.ImageDto;
 import com.example.highload.repos.ImageObjectRepository;
@@ -49,7 +49,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     @Transactional(value = Transactional.TxType.REQUIRES_NEW, rollbackOn = {NoSuchElementException.class, Exception.class})
     public List<Image> saveImagesForOrder(List<ImageDto> imageDtos, int orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
+        ClientOrder order = orderRepository.findById(orderId).orElseThrow();
         List<Image> images = imageRepository.saveAll(imageDtos.stream().map(dataTransformer::imageFromDto).toList());
         List<ImageObject> imageObjects = images.stream().map(image ->
                 {

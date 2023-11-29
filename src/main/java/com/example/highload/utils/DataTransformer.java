@@ -9,7 +9,6 @@ import lombok.Data;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component("dataTransformer")
@@ -107,7 +106,7 @@ public class DataTransformer {
         response.setIsApproved(responseDto.isApproved());
         User user = userRepository.findById(responseDto.getUserId()).orElseThrow();
         response.setUser(user);
-        Order order = orderRepository.findById(responseDto.getOrderId()).orElseThrow();
+        ClientOrder order = orderRepository.findById(responseDto.getOrderId()).orElseThrow();
         response.setOrder(order);
         return response;
     }
@@ -182,7 +181,7 @@ public class DataTransformer {
 
     /* orders */
 
-    public OrderDto orderToDto(Order order) {
+    public OrderDto orderToDto(ClientOrder order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
         orderDto.setDescription(order.getDescription());
@@ -195,8 +194,8 @@ public class DataTransformer {
         return orderDto;
     }
 
-    public Order orderFromDto(OrderDto orderDto) {
-        Order order = new Order();
+    public ClientOrder orderFromDto(OrderDto orderDto) {
+        ClientOrder order = new ClientOrder();
         order.setId(orderDto.getId());
         order.setDescription(orderDto.getDescription());
         order.setCreated(orderDto.getCreated());
@@ -208,7 +207,7 @@ public class DataTransformer {
         return order;
     }
 
-    public List<OrderDto> orderListToDto(List<Order> entities) {
+    public List<OrderDto> orderListToDto(List<ClientOrder> entities) {
         return entities.stream().map(this::orderToDto).toList();
     }
 
