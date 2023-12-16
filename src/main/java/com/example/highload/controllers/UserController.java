@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/user")
+@RequestMapping(value = "/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRequestDto user) {
 
-        if (userService.findByLogin(user.getLogin()) != null || userService.findUserRequestByLogin(user.getLogin()) != null) {
+        if (userService.findByLoginElseNull(user.getLogin()) != null || userService.findUserRequestByLoginElseNull(user.getLogin()) != null) {
             return new ResponseEntity<>("This user already exists or is awaiting approval", HttpStatus.CONFLICT);
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -54,7 +54,7 @@ public class UserController {
     @PostMapping("/profile/add/{userId}")
     public ResponseEntity addProfile(@Valid @RequestBody ProfileDto profile, @PathVariable int userId) {
 
-        if (profileService.findByUserId(userId) == null) {
+        if (profileService.findByUserIdElseNull(userId) == null) {
             profileService.saveProfileForUser(profile, userId);
             return new ResponseEntity<>("Profile successfully added", HttpStatus.OK);
         }

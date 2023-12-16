@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/profile")
+@RequestMapping(value = "/api/profile")
 @RequiredArgsConstructor
 public class ProfileAPIController {
 
@@ -60,9 +60,7 @@ public class ProfileAPIController {
         Profile entity = profileService.findById(id);
         Pageable pageable = PageRequest.of(page, 50);
         Page<Image> images = imageService.findAllProfileImages(id, pageable);
-        // TODO вынести 50 в константы из хардкода
         HttpHeaders responseHeaders = paginationHeadersCreator.pageWithTotalElementsHeadersCreate(images);
-        // "запрос, который вернет findAll с пагинацией и с указанием общего количества записей в http хедере."
         return ResponseEntity.ok().headers(responseHeaders).body(dataTransformer.imageListToDto(images.getContent()));
 
     }

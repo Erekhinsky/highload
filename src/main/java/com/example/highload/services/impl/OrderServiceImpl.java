@@ -7,6 +7,7 @@ import com.example.highload.model.network.OrderDto;
 import com.example.highload.repos.OrderRepository;
 import com.example.highload.repos.TagRepository;
 import com.example.highload.services.OrderService;
+import com.example.highload.services.TagService;
 import com.example.highload.utils.DataTransformer;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
     private final DataTransformer dataTransformer;
 
     @Override
@@ -36,14 +37,13 @@ public class OrderServiceImpl implements OrderService {
         order.setPrice(orderDto.getPrice());
         order.setDescription(orderDto.getDescription());
         order.setStatus(orderDto.getStatus());
-        // TODO TAGS ADD/DELETE
         orderRepository.save(order);
         return order;
     }
 
     @Override
     public ClientOrder getOrderById(int id) {
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findById(id).orElseThrow();
     }
 
     @Override
@@ -58,12 +58,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<ClientOrder> getOrdersByTags(List<Integer> tagIds, Pageable pageable) {
-        return orderRepository.findAllByMultipleTagsIds(tagIds, pageable);
+        return orderRepository.findAllByMultipleTagsIds(tagIds, tagIds.size(), pageable);
     }
 
     @Override
     public Page<ClientOrder> getOpenOrdersByTags(List<Integer> tagIds, Pageable pageable) {
-        return orderRepository.findAllByMultipleTagsIdsAndStatus(tagIds, OrderStatus.OPEN.toString(), pageable);
+        return orderRepository.findAllByMultipleTagsIdsAndStatus(tagIds, tagIds.size(), OrderStatus.OPEN.toString(), pageable);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         if (tagIdsToAdd.size() + oldTagIds.size() <= 10) {
             List<Tag> tagsToAdd = new ArrayList<>();
             for (Integer tagIdToAdd : tagIdsToAdd) {
-                Tag tag = tagRepository.findById(tagIdToAdd).orElseThrow();
+                Tag tag = tagService.findById(tagIdToAdd);
                 tagsToAdd.add(tag);
             }
             order.getTags().addAll(tagsToAdd);

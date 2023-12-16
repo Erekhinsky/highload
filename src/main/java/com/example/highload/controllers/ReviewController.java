@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/review")
+@RequestMapping(value = "/api/review")
 @RequiredArgsConstructor
 public class ReviewController {
 

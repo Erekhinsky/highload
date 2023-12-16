@@ -87,7 +87,7 @@ public class ClientOrderAPITests {
                 .and()
                 .body(new JwtRequest(userName, userName, user.getRole().getName().toString()))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
@@ -96,7 +96,7 @@ public class ClientOrderAPITests {
     @Test
     @Order(1)
     public void addOrder() {
-        /* TODO: RUN */
+         
 
         User client1 = userRepository.findByLogin("client1").orElseThrow();
         // create order
@@ -138,7 +138,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/save")
+                        .post("/api/order/save")
                         .then()
                         .extract();
 
@@ -165,7 +165,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/save")
+                        .post("/api/order/save")
                         .then()
                         .extract();
 
@@ -189,7 +189,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/save")
+                        .post("/api/order/save")
                         .then()
                         .extract();
         Assertions.assertAll(
@@ -200,7 +200,7 @@ public class ClientOrderAPITests {
     @Test
     @Order(2)
     public void updateOrder() {
-        /* TODO: RUN */
+         
         User client1 = userRepository.findByLogin("client1").orElseThrow();
 
         Tag tag1 = tagRepository.findByName("1t").orElseThrow();
@@ -231,7 +231,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/update/" + clientOrder1WithId.getId())
+                        .post("/api/order/update/" + clientOrder1WithId.getId())
                         .then()
                         .extract();
         Pageable pageable = PageRequest.of(0, 50);
@@ -257,7 +257,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/update/" + clientOrder1WithId.getId())
+                        .post("/api/order/update/" + clientOrder1WithId.getId())
                         .then()
                         .extract();
 
@@ -270,7 +270,7 @@ public class ClientOrderAPITests {
     @Test
     @Order(3)
     public void getAllUserOpenOrders() {
-        /* TODO: RUN */
+         
 
         User client1 = userRepository.findByLogin("client1").orElseThrow();
 
@@ -285,7 +285,7 @@ public class ClientOrderAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/order/open/user/" + client1.getId() + "/0")
+                        .get("/api/order/open/user/" + client1.getId() + "/0")
                         .then()
                         .extract();
 
@@ -313,7 +313,7 @@ public class ClientOrderAPITests {
     @Test
     @Order(4)
     public void addTagsToOrder() {
-        /* TODO: RUN */
+         
         User client1 = userRepository.findByLogin("client1").orElseThrow();
 
         Tag tag1 = tagRepository.findByName("1t").orElseThrow();
@@ -348,7 +348,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(List.of(tagDtoExisting.getId()))
                         .when()
-                        .get("/api/app/order/single/" + clientOrder1WithId.getId() + "/tags/add")
+                        .post("/api/order/single/" + clientOrder1WithId.getId() + "/tags/add")
                         .then()
                         .extract();
 
@@ -368,7 +368,7 @@ public class ClientOrderAPITests {
                         .and()
                         .body(List.of(tagDtoNotExisting))
                         .when()
-                        .get("/api/app/order/single/" + clientOrder1WithId.getId() + "/tags/add")
+                        .post("/api/order/single/" + clientOrder1WithId.getId() + "/tags/add")
                         .then()
                         .extract();
 
@@ -380,7 +380,85 @@ public class ClientOrderAPITests {
     @Test
     @Order(5)
     public void getAllOrdersByTags() {
-        /* TODO: implement, RUN */
+
+        Tag tag1 = tagRepository.findByName("1t").orElseThrow();
+        Tag tag3 = tagRepository.findByName("3t").orElseThrow();
+
+        // get token
+
+        String clientTokenResponse = getToken("client1");
+
+        // orders 1o & 3o will fit
+
+        ExtractableResponse<Response> response1 =
+                given()
+                        .header("Authorization", "Bearer " + clientTokenResponse)
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(List.of(tag1.getId(), tag3.getId()))
+                        .when()
+                        .get("/api/order/all/tag/0")
+                        .then()
+                        .extract();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(HttpStatus.OK.value(), response1.statusCode()),
+                () -> Assertions.assertEquals("false", response1.header("app-page-has-next")),
+                () -> Assertions.assertEquals("0", response1.header("app-current-page-num"))
+        );
+
+        List<OrderDto> orderDtos = response1.body().jsonPath().getList(".", OrderDto.class);
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(2, orderDtos.size()),
+                () -> Assertions.assertEquals("1o", orderDtos.get(1).getDescription()),
+                () -> Assertions.assertEquals("3o", orderDtos.get(0).getDescription())
+        );
+    }
+
+    @Test
+    @Order(6)
+    public void getAllOpenOrdersByTags() {
+        User client1 = userRepository.findByLogin("client1").orElseThrow();
+
+        Tag tag1 = tagRepository.findByName("1t").orElseThrow();
+        Tag tag3 = tagRepository.findByName("3t").orElseThrow();
+
+        Pageable pageable = PageRequest.of(0, 50);
+        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable);
+        ClientOrder order1 = result.getContent().get(0);
+        order1.setStatus(OrderStatus.CLOSED);
+        orderRepository.save(order1);
+
+        // get token
+
+        String clientTokenResponse = getToken("client1");
+
+        // orders 1o & 3o will fit
+
+        ExtractableResponse<Response> response1 =
+                given()
+                        .header("Authorization", "Bearer " + clientTokenResponse)
+                        .header("Content-type", "application/json")
+                        .and()
+                        .body(List.of(tag1.getId(), tag3.getId()))
+                        .when()
+                        .get("/api/order/open/tag/0")
+                        .then()
+                        .extract();
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(HttpStatus.OK.value(), response1.statusCode()),
+                () -> Assertions.assertEquals("false", response1.header("app-page-has-next")),
+                () -> Assertions.assertEquals("0", response1.header("app-current-page-num"))
+        );
+
+        List<OrderDto> orderDtos = response1.body().jsonPath().getList(".", OrderDto.class);
+
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(1, orderDtos.size()),
+                () -> Assertions.assertEquals("3o", orderDtos.get(0).getDescription())
+        );
     }
 
 

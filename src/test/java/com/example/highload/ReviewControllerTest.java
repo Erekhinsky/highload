@@ -84,7 +84,7 @@ public class ReviewControllerTest {
                 .and()
                 .body(new JwtRequest(login, password, role))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
@@ -112,7 +112,7 @@ public class ReviewControllerTest {
                         .and()
                         .body(profileDto)
                         .when()
-                        .post("/api/app/user/profile/add/" + userId)
+                        .post("/api/user/profile/add/" + userId)
                         .then()
                         .extract();
 
@@ -131,7 +131,7 @@ public class ReviewControllerTest {
                         .and()
                         .body(reviewDto)
                         .when()
-                        .post("/api/app/review/save")
+                        .post("/api/review/save")
                         .then()
                         .extract();
         Assertions.assertAll(
@@ -157,7 +157,7 @@ public class ReviewControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/review/all/" + profile.getId() + "/" + 0)
+                        .get("/api/review/all/" + profile.getId() + "/" + 0)
                         .then()
                         .extract();
 
@@ -184,7 +184,7 @@ public class ReviewControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/review/all/" + profile.getId() + 10 + "/" + 0)
+                        .get("/api/review/all/" + profile.getId() + 10 + "/" + 0)
                         .then()
                         .extract();
 
@@ -210,7 +210,7 @@ public class ReviewControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/review/single/" + review.getId())
+                        .get("/api/review/single/" + review.getId())
                         .then()
                         .extract();
 

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/order")
+@RequestMapping(value = "/api/order")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -59,7 +59,7 @@ public class OrderController {
         Page<ClientOrder> entityList = orderService.getUserOrders(userId, pageable);
 
         HttpHeaders responseHeaders = paginationHeadersCreator.endlessSwipeHeadersCreate(entityList);
-        // "findAll в виде бесконечной прокрутки без указания общего количества записей"
+          
 
         return ResponseEntity.ok().headers(responseHeaders).body(dataTransformer.orderListToDto(entityList.getContent()));
 
@@ -86,7 +86,7 @@ public class OrderController {
 
 
     @CrossOrigin
-    @GetMapping("/single/{orderId}/tags/add")
+    @PostMapping("/single/{orderId}/tags/add")
     @PreAuthorize("hasAnyAuthority('CLIENT')")
     public ResponseEntity addTagsToOrder(@Valid @RequestBody List<Integer> tagIds, @PathVariable int orderId){
         ClientOrder order = orderService.addTagsToOrder( tagIds, orderId);
@@ -97,7 +97,7 @@ public class OrderController {
     }
 
     @CrossOrigin
-    @GetMapping("/single/{orderId}/tags/delete")
+    @PostMapping("/single/{orderId}/tags/delete")
     @PreAuthorize("hasAnyAuthority('CLIENT')")
     public ResponseEntity deleteTagsFromOrder(@Valid @RequestBody List<Integer> tagIds, @PathVariable int orderId){
         ClientOrder order = orderService.deleteTagsFromOrder( tagIds, orderId);
@@ -129,7 +129,6 @@ public class OrderController {
         Page<ClientOrder> entityList = orderService.getOrdersByTags(tags, pageable);
 
         HttpHeaders responseHeaders = paginationHeadersCreator.endlessSwipeHeadersCreate(entityList);
-        //"findAll в виде бесконечной прокрутки без указания общего количества записей"
 
         return ResponseEntity.ok().headers(responseHeaders).body(dataTransformer.orderListToDto(entityList.getContent()));
     }
@@ -144,7 +143,6 @@ public class OrderController {
         Page<ClientOrder> entityList = orderService.getOpenOrdersByTags(tags, pageable);
 
         HttpHeaders responseHeaders = paginationHeadersCreator.endlessSwipeHeadersCreate(entityList);
-        //"findAll в виде бесконечной прокрутки без указания общего количества записей"
 
         return ResponseEntity.ok().headers(responseHeaders).body(dataTransformer.orderListToDto(entityList.getContent()));
     }

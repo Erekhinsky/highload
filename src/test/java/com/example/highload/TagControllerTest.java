@@ -97,7 +97,7 @@ public class TagControllerTest {
                 .and()
                 .body(new JwtRequest(login, password, role))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
@@ -120,7 +120,7 @@ public class TagControllerTest {
                         .and()
                         .body(tagDto)
                         .when()
-                        .post("/api/app/tag/save")
+                        .post("/api/tag/save")
                         .then()
                         .extract();
         Assertions.assertAll(
@@ -148,7 +148,7 @@ public class TagControllerTest {
                         .and()
                         .body(tagDto)
                         .when()
-                        .post("/api/app/tag/save")
+                        .post("/api/tag/save")
                         .then()
                         .extract();
         // TODO Change 500 to 400
@@ -173,7 +173,7 @@ public class TagControllerTest {
                         .and()
                         .body(tagDto)
                         .when()
-                        .post("/api/app/tag/save")
+                        .post("/api/tag/save")
                         .then()
                         .extract();
         Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.response().getStatusCode());
@@ -189,7 +189,7 @@ public class TagControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/tag/all/0")
+                        .get("/api/tag/all/0")
                         .then()
                         .extract();
         Assertions.assertAll(
@@ -211,7 +211,7 @@ public class TagControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/tag/all/BLABLABLA")
+                        .get("/api/tag/all/BLABLABLA")
                         .then()
                         .extract();
         Assertions.assertAll(
@@ -249,7 +249,7 @@ public class TagControllerTest {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/save")
+                        .post("/api/order/save")
                         .then()
                         .extract();
 
@@ -262,7 +262,7 @@ public class TagControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .post("/api/app/tag/remove/" + orderId + "/" + tagId)
+                        .post("/api/tag/remove/" + orderId + "/" + tagId)
                         .then()
                         .extract();
 
@@ -302,7 +302,7 @@ public class TagControllerTest {
                         .and()
                         .body(orderDto)
                         .when()
-                        .post("/api/app/order/save")
+                        .post("/api/order/save")
                         .then()
                         .extract();
 
@@ -315,7 +315,7 @@ public class TagControllerTest {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .post("/api/app/tag/remove/" + orderId + "/" + tagId + 1)
+                        .post("/api/tag/remove/" + orderId + "/" + tagId + 1)
                         .then()
                         .extract();
         Assertions.assertAll(

@@ -90,7 +90,7 @@ public class ProfileAPITests {
                 .and()
                 .body(new JwtRequest(userName, userName, user.getRole().getName().toString()))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
@@ -101,7 +101,6 @@ public class ProfileAPITests {
 
         User artist1 = userRepository.findByLogin("artist1").orElseThrow();
 
-        // create profile using repo
 
         Profile artistProfile = new Profile();
         artistProfile.setUser(artist1);
@@ -127,7 +126,7 @@ public class ProfileAPITests {
                         .and()
                         .body(artistProfileDto)
                         .when()
-                        .post("/api/app/profile/edit/" + artistProfileWithId.getId())
+                        .post("/api/profile/edit/" + artistProfileWithId.getId())
                         .then()
                         .extract();
 
@@ -151,7 +150,7 @@ public class ProfileAPITests {
                         .and()
                         .body(artistProfileDto)
                         .when()
-                        .post("/api/app/profile/edit/" + artistProfileWithId.getId())
+                        .post("/api/profile/edit/" + artistProfileWithId.getId())
                         .then()
                         .extract();
 
@@ -164,7 +163,7 @@ public class ProfileAPITests {
 
     @Test
     @Order(2)
-    public void getProfile() { /* TODO: RUN */
+    public void getProfile() {  
 
         // create profile using repo
 
@@ -188,7 +187,7 @@ public class ProfileAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/profile/single/" + clientProfileWithId.getId().toString())
+                        .get("/api/profile/single/" + clientProfileWithId.getId().toString())
                         .then()
                         .extract();
 
@@ -209,7 +208,7 @@ public class ProfileAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/profile/single/" + badId)
+                        .get("/api/profile/single/" + badId)
                         .then()
                         .extract();
 
@@ -221,7 +220,7 @@ public class ProfileAPITests {
 
     @Test
     @Order(3)
-    public void getAllProfiles() { /* TODO: RUN */
+    public void getAllProfiles() {  
 
         // get token
 
@@ -234,7 +233,7 @@ public class ProfileAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/profile/all/0")
+                        .get("/api/profile/all/0")
                         .then()
                         .extract();
 
@@ -257,7 +256,7 @@ public class ProfileAPITests {
 
     @Test
     @Order(4)
-    public void getProfileImages() { /* TODO: RUN */
+    public void getProfileImages() {  
 
         Profile artistProfile = userRepository.findByLogin("artist1").orElseThrow().getProfile();
 
@@ -296,7 +295,7 @@ public class ProfileAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/profile/single/" + artistProfile.getId() + "/images/0")
+                        .get("/api/profile/single/" + artistProfile.getId() + "/images/0")
                         .then()
                         .extract();
 
@@ -323,7 +322,7 @@ public class ProfileAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/profile/single/" + (artistProfile.getId() + 2) + "/images/0")
+                        .get("/api/profile/single/" + (artistProfile.getId() + 2) + "/images/0")
                         .then()
                         .extract();
 
