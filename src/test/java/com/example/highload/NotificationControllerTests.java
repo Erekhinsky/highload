@@ -102,14 +102,10 @@ public class NotificationControllerTests {
                 .and()
                 .body(new JwtRequest(login, password, role))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
-
-    // post setRead /update/{id}
-    // get getAllQueries /all/{userId}/{page}
-    // get getNewQueries /new/{userId}/{page}
 
     @Test
     @Order(1)
@@ -151,7 +147,7 @@ public class NotificationControllerTests {
                         .and()
                         .body(notificationDto)
                         .when()
-                        .post("/api/app/notification/save")
+                        .post("/api/notification/save")
                         .then()
                         .extract();
 
@@ -178,7 +174,7 @@ public class NotificationControllerTests {
                         .and()
                         .body(new NotificationDto())
                         .when()
-                        .post("/api/app/notification/save")
+                        .post("/api/notification/save")
                         .then()
                         .extract();
         Assertions.assertAll(
@@ -203,7 +199,7 @@ public class NotificationControllerTests {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .post("/api/app/notification/update/" + notification.getId())
+                        .post("/api/notification/update/" + notification.getId())
                         .then()
                         .extract();
 
@@ -235,7 +231,7 @@ public class NotificationControllerTests {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .post("/api/app/notification/update/" + notification.getId() + 3)
+                        .post("/api/notification/update/" + notification.getId() + 3)
                         .then()
                         .extract();
 
@@ -244,33 +240,6 @@ public class NotificationControllerTests {
                 () -> Assertions.assertEquals("Wrong ids in path!", response.body().asString())
         );
     }
-
-//    @Test
-//    @Order(5)
-//    void setReadAPISenderRead() {
-//        User sender = userRepository.findByLogin(clientLogin).orElseThrow();
-//        Integer profileId = profileRepository.findByUser_Id(sender.getId()).orElseThrow().getId();
-//        Pageable pageable = PageRequest.of(0, 50);
-//        String tokenResponse = getToken(clientLogin, clientPassword, "CLIENT");
-//
-//        Notification notification = notificationRepository.findAllBySenderProfile_Id(profileId, pageable)
-//                .stream().findFirst().orElseThrow();
-//        notification.setIsRead(false);
-//        notificationRepository.save(notification);
-//
-//        ExtractableResponse<Response> response =
-//                given()
-//                        .header("Content-type", "application/json")
-//                        .header("Authorization", "Bearer " + tokenResponse)
-//                        .when()
-//                        .post("/api/app/notification/update/" + notification.getId())
-//                        .then()
-//                        .extract();
-//
-//        Assertions.assertAll(
-//                () -> Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.response().getStatusCode())
-//        );
-//    }
 
     @Test
     @Order(6)
@@ -292,7 +261,7 @@ public class NotificationControllerTests {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/notification/all/" + receiverProfileId + "/" + 0)
+                        .get("/api/notification/all/" + receiverProfileId + "/" + 0)
                         .then()
                         .extract();
 
@@ -336,7 +305,7 @@ public class NotificationControllerTests {
                         .header("Content-type", "application/json")
                         .header("Authorization", "Bearer " + tokenResponse)
                         .when()
-                        .get("/api/app/notification/new/" + receiverProfileId + "/" + 0)
+                        .get("/api/notification/new/" + receiverProfileId + "/" + 0)
                         .then()
                         .extract();
 

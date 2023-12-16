@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/response")
+@RequestMapping(value = "/api/response")
 @RequiredArgsConstructor
 public class ResponseController {
 

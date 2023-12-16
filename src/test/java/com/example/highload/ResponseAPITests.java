@@ -92,7 +92,7 @@ public class ResponseAPITests {
                 .and()
                 .body(new JwtRequest(userName, userName, user.getRole().getName().toString()))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
@@ -132,7 +132,7 @@ public class ResponseAPITests {
                         .and()
                         .body(responseDto)
                         .when()
-                        .post("/api/app/response/save")
+                        .post("/api/response/save")
                         .then()
                         .extract();
 
@@ -167,7 +167,7 @@ public class ResponseAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/response/all/order/" + clientOrder.getId() + "/0")
+                        .get("/api/response/all/order/" + clientOrder.getId() + "/0")
                         .then()
                         .extract();
 
@@ -208,7 +208,7 @@ public class ResponseAPITests {
                         .header("Authorization", "Bearer " + tokenResponse)
                         .header("Content-type", "application/json")
                         .when()
-                        .get("/api/app/response/all/user/" + artist1.getId() + "/0")
+                        .get("/api/response/all/user/" + artist1.getId() + "/0")
                         .then()
                         .extract();
 

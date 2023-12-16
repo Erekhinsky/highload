@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/tag")
+@RequestMapping(value = "/api/tag")
 @RequiredArgsConstructor
 public class TagController {
 
@@ -33,7 +33,7 @@ public class TagController {
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity save(@Valid @RequestBody TagDto data) {
         if (tagService.saveTag(data) != null)
-            return ResponseEntity.ok("");
+            return ResponseEntity.ok("Tag successfully created");
         else return ResponseEntity.badRequest().body("Couldn't save tag, check data");
     }
 
@@ -51,7 +51,7 @@ public class TagController {
     @PostMapping("/remove/{orderId}/{tagId}")
     public ResponseEntity removeTagFromOrder(@PathVariable int orderId, @PathVariable int tagId) {
         tagService.removeTagFromOrder(tagId, orderId);
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Tag successfully removed from order");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/profile")
+@RequestMapping(value = "/api/profile")
 @RequiredArgsConstructor
 public class ProfileAPIController {
 

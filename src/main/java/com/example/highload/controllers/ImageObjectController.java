@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping(value = "/api/app/image")
+@RequestMapping(value = "/api/image")
 @RequiredArgsConstructor
 public class ImageObjectController {
 

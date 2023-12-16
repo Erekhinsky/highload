@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequestMapping(value = "/api/app/admin")
+@RequestMapping(value = "/api/admin")
 @RequiredArgsConstructor
 public class AdminController {
 
@@ -56,9 +56,8 @@ public class AdminController {
 
     @PostMapping("/user/add")
     @CrossOrigin
-//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity addUser(@Valid @RequestBody UserDto user) {
-        if (userService.findByLogin(user.getLogin()) == null) {
+        if (userService.findByLoginElseNull(user.getLogin()) == null) {
             adminService.addUser(user);
             return ResponseEntity.ok("User added");
         }
@@ -68,7 +67,6 @@ public class AdminController {
 
     @GetMapping("/user-request/all/{page}")
     @CrossOrigin
-//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity getAllUserRequests(@PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Page<UserRequest> entityList = userService.getAllUserRequests(pageable);

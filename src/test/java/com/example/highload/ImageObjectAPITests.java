@@ -81,7 +81,7 @@ public class ImageObjectAPITests {
                 .and()
                 .body(new JwtRequest(userName, userName, user.getRole().getName().toString()))
                 .when()
-                .post("/api/app/user/login")
+                .post("/api/user/login")
                 .then()
                 .extract().body().as(JwtResponse.class).getToken();
     }
@@ -136,7 +136,7 @@ public class ImageObjectAPITests {
                         .and()
                         .body(imageDtoList)
                         .when()
-                        .post("/api/app/image/add/profile/" + artistProfileWithId.getId())
+                        .post("/api/image/add/profile/" + artistProfileWithId.getId())
                         .then()
                         .extract();
 
@@ -165,7 +165,7 @@ public class ImageObjectAPITests {
                         .and()
                         .body(imageDtoList)
                         .when()
-                        .post("/api/app/image/add/profile/" + clientProfileWithId.getId())
+                        .post("/api/image/add/profile/" + clientProfileWithId.getId())
                         .then()
                         .extract();
 
@@ -198,7 +198,7 @@ public class ImageObjectAPITests {
                         .and()
                         .body(imageDto)
                         .when()
-                        .post("/api/app/image/change/profile/" + artistProfile.getId())
+                        .post("/api/image/change/profile/" + artistProfile.getId())
                         .then()
                         .extract();
 
@@ -235,7 +235,7 @@ public class ImageObjectAPITests {
                         .header("Authorization", "Bearer " + tokenResponse1)
                         .header("Content-type", "application/json")
                         .when()
-                        .post("/api/app/image/remove/profile/" + artistProfile.getId() + "/" + imageId)
+                        .post("/api/image/remove/profile/" + artistProfile.getId() + "/" + imageId)
                         .then()
                         .extract();
 
@@ -256,7 +256,7 @@ public class ImageObjectAPITests {
                         .header("Authorization", "Bearer " + tokenResponse2)
                         .header("Content-type", "application/json")
                         .when()
-                        .post("/api/app/image/remove/profile/" + clientProfile.getId() + "/" + imageId)
+                        .post("/api/image/remove/profile/" + clientProfile.getId() + "/" + imageId)
                         .then()
                         .extract();
 
