@@ -34,28 +34,24 @@ public class AdminController {
     private final PaginationHeadersCreator paginationHeadersCreator;
 
     @PostMapping("/user-request/approve/{userRequestId}")
-    @CrossOrigin
     public ResponseEntity approveUserRequest(@PathVariable int userRequestId) {
         adminService.approveUser(userRequestId);
         return ResponseEntity.ok("User approved");
     }
 
     @PostMapping("/user/delete/{id}")
-    @CrossOrigin
     public ResponseEntity deleteUser(@PathVariable int id) {
         adminService.deleteUser(id);
         return ResponseEntity.ok("User deleted");
     }
 
     @PostMapping("/user/all/delete-expired/{days}")
-    @CrossOrigin
     public ResponseEntity deleteLogicallyDeletedAccountsExpired(@PathVariable int days) {
         adminService.deleteLogicallyDeletedUsers(days);
         return ResponseEntity.ok("Users deleted");
     }
 
     @PostMapping("/user/add")
-    @CrossOrigin
     public ResponseEntity addUser(@Valid @RequestBody UserDto user) {
         if (userService.findByLoginElseNull(user.getLogin()) == null) {
             adminService.addUser(user);
@@ -66,7 +62,6 @@ public class AdminController {
     }
 
     @GetMapping("/user-request/all/{page}")
-    @CrossOrigin
     public ResponseEntity getAllUserRequests(@PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Page<UserRequest> entityList = userService.getAllUserRequests(pageable);

@@ -143,7 +143,7 @@ public class ClientOrderAPITests {
                         .extract();
 
         Pageable pageable = PageRequest.of(0, 50);
-        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable);
+        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable).orElse(Page.empty());
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Order saved", response1.body().asString()),
@@ -235,7 +235,7 @@ public class ClientOrderAPITests {
                         .then()
                         .extract();
         Pageable pageable = PageRequest.of(0, 50);
-        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable);
+        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable).orElse(Page.empty());
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Order updated", response1.body().asString()),
@@ -425,7 +425,7 @@ public class ClientOrderAPITests {
         Tag tag3 = tagRepository.findByName("3t").orElseThrow();
 
         Pageable pageable = PageRequest.of(0, 50);
-        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable);
+        Page<ClientOrder> result = orderRepository.findAllByUser_Id(client1.getId(), pageable).orElse(Page.empty());
         ClientOrder order1 = result.getContent().get(0);
         order1.setStatus(OrderStatus.CLOSED);
         orderRepository.save(order1);

@@ -28,7 +28,6 @@ public class NotificationController {
     private final PaginationHeadersCreator paginationHeadersCreator;
     private final DataTransformer dataTransformer;
 
-    @CrossOrigin
     @PostMapping("/save")
     public ResponseEntity save(@Valid @RequestBody NotificationDto data){
         if(notificationService.saveNotification(data) != null)
@@ -36,7 +35,6 @@ public class NotificationController {
         else return ResponseEntity.badRequest().body("Couldn't save notification, check data");
     }
 
-    @CrossOrigin
     @PostMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
     public ResponseEntity setRead(@PathVariable int id){
@@ -45,7 +43,6 @@ public class NotificationController {
         else return ResponseEntity.badRequest().body("Couldn't change notification, check data");
     }
 
-    @CrossOrigin
     @GetMapping("/all/{userId}/{page}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
     public ResponseEntity getAllQueries(@PathVariable int userId, @PathVariable int page) {
@@ -57,7 +54,6 @@ public class NotificationController {
     }
 
 
-    @CrossOrigin
     @GetMapping("/new/{userId}/{page}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
     public ResponseEntity getNewQueries(@PathVariable int userId, @PathVariable int page) {

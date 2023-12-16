@@ -20,6 +20,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -155,8 +156,12 @@ public class NotificationControllerTests {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(HttpStatus.OK.value(), response.response().getStatusCode()),
                 () -> {
-                    Notification notification = notificationRepository.findAllBySenderProfile_Id(clientProfileWithId.getId(), pageable)
-                            .stream().findFirst().orElseThrow();
+                    Notification notification = notificationRepository
+                            .findAllBySenderProfile_Id(clientProfileWithId.getId(), pageable)
+                            .orElse(Page.empty())
+                            .stream()
+                            .findFirst()
+                            .orElseThrow();
                     Assertions.assertEquals(senderEmail, notification.getSenderProfile().getMail());
                 }
         );
@@ -191,7 +196,9 @@ public class NotificationControllerTests {
         Pageable pageable = PageRequest.of(0, 50);
         String tokenResponse = getToken(artistLogin, artistPassword, artistRole);
 
-        Notification notification = notificationRepository.findAllBySenderProfile_Id(profileId, pageable)
+        Notification notification = notificationRepository
+                .findAllBySenderProfile_Id(profileId, pageable)
+                .orElse(Page.empty())
                 .stream().findFirst().orElseThrow();
 
         ExtractableResponse<Response> response =
@@ -206,7 +213,9 @@ public class NotificationControllerTests {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(HttpStatus.OK.value(), response.response().getStatusCode()),
                 () -> {
-                    Notification notification1 = notificationRepository.findAllBySenderProfile_Id(profileId, pageable)
+                    Notification notification1 = notificationRepository
+                            .findAllBySenderProfile_Id(profileId, pageable)
+                            .orElse(Page.empty())
                             .stream().findFirst().orElseThrow();
                     Assertions.assertTrue(notification1.getIsRead());
                 }
@@ -221,7 +230,9 @@ public class NotificationControllerTests {
         Pageable pageable = PageRequest.of(0, 50);
         String tokenResponse = getToken(artistLogin, artistPassword, artistRole);
 
-        Notification notification = notificationRepository.findAllBySenderProfile_Id(profileId, pageable)
+        Notification notification = notificationRepository
+                .findAllBySenderProfile_Id(profileId, pageable)
+                .orElseThrow()
                 .stream().findFirst().orElseThrow();
         notification.setIsRead(false);
         notificationRepository.save(notification);
@@ -253,7 +264,9 @@ public class NotificationControllerTests {
         Pageable pageable = PageRequest.of(0, 50);
         String tokenResponse = getToken(artistLogin, artistPassword, artistRole);
 
-        Notification notification = notificationRepository.findAllBySenderProfile_Id(profileId, pageable)
+        Notification notification = notificationRepository
+                .findAllBySenderProfile_Id(profileId, pageable)
+                .orElse(Page.empty())
                 .stream().findFirst().orElseThrow();
 
         ExtractableResponse<Response> response =

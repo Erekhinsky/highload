@@ -27,7 +27,6 @@ public class UserController {
     private final AuthenticationService authenticationService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody UserDto user) {
         if (user.getLogin() == null || user.getPassword() == null) {
@@ -37,7 +36,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRequestDto user) {
 
@@ -50,7 +48,6 @@ public class UserController {
 
     }
 
-    @CrossOrigin
     @PostMapping("/profile/add/{userId}")
     public ResponseEntity addProfile(@Valid @RequestBody ProfileDto profile, @PathVariable int userId) {
 
@@ -61,7 +58,6 @@ public class UserController {
         return new ResponseEntity<>("Profile already added", HttpStatus.BAD_REQUEST);
     }
 
-    @CrossOrigin
     @PostMapping("/deactivate/{id}")
     public ResponseEntity<?> deactivate(@PathVariable int id) {
         userService.deactivateById(id);

@@ -37,12 +37,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Page<Image> findAllProfileImages(int profileId, Pageable pageable) {
-        return imageRepository.findAllByImageObject_Profile_Id(profileId, pageable);
+        return imageRepository.findAllByImageObject_Profile_Id(profileId, pageable).orElse(Page.empty());
     }
 
     @Override
     public Page<Image> findAllOrderImages(int orderId, Pageable pageable) {
-        return imageRepository.findAllByImageObject_Order_Id(orderId, pageable);
+        return imageRepository.findAllByImageObject_Order_Id(orderId, pageable).orElse(Page.empty());
     }
 
     @Override

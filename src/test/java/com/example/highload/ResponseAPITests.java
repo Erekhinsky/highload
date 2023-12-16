@@ -137,7 +137,8 @@ public class ResponseAPITests {
                         .extract();
 
         Pageable pageable = PageRequest.of(0, 50);
-        Page<com.example.highload.model.inner.Response> result = responseRepository.findAllByOrder_Id(clientOrder1WithId.getId(), pageable);
+        Page<com.example.highload.model.inner.Response> result = responseRepository
+                .findAllByOrder_Id(clientOrder1WithId.getId(), pageable).orElse(Page.empty());
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Response added", response1.body().asString()),

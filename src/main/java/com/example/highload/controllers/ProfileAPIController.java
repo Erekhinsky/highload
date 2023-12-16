@@ -30,14 +30,12 @@ public class ProfileAPIController {
     private final PaginationHeadersCreator paginationHeadersCreator;
     private final DataTransformer dataTransformer;
 
-    @CrossOrigin
     @PostMapping("/edit/{id}")
     public ResponseEntity edit(@Valid @RequestBody ProfileDto data, @PathVariable int id){
         profileService.editProfile(data, id);
         return ResponseEntity.ok("Profile edited");
     }
 
-    @CrossOrigin
     @GetMapping("/all/{page}")
     public ResponseEntity getAll(@PathVariable int page){
         Pageable pageable = PageRequest.of(page, 50);
@@ -47,14 +45,12 @@ public class ProfileAPIController {
         return ResponseEntity.ok().headers(responseHeaders).body(dtoList);
     }
 
-    @CrossOrigin
     @GetMapping("/single/{id}")
     public ResponseEntity getById(@PathVariable int id){
         Profile entity = profileService.findById(id);
         return ResponseEntity.ok(dataTransformer.profileToDto(entity));
     }
 
-    @CrossOrigin
     @GetMapping("/single/{id}/images/{page}")
     public ResponseEntity getProfileImagesByIdAndPageNumber(@PathVariable int id, @PathVariable int page){
         Profile entity = profileService.findById(id);
