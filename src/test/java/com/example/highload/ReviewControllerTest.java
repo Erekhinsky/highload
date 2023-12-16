@@ -137,7 +137,7 @@ public class ReviewControllerTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(HttpStatus.OK.value(), response2.response().getStatusCode()),
                 () -> {
-                    Page<Review> review = reviewRepository.findAllByProfile_Id(profile.getId(), pageable);
+                    Page<Review> review = reviewRepository.findAllByProfile_Id(profile.getId(), pageable).orElse(Page.empty());
                     Assertions.assertEquals(1, review.getNumberOfElements());
                 }
         );
@@ -203,7 +203,10 @@ public class ReviewControllerTest {
 
         Pageable pageable = PageRequest.of(0, 50);
         Profile profile = profileRepository.findByUser_Id(userId).orElseThrow();
-        Review review = reviewRepository.findAllByProfile_Id(profile.getId(), pageable).stream().findFirst().orElseThrow();
+        Review review = reviewRepository
+                .findAllByProfile_Id(profile.getId(), pageable)
+                .orElse(Page.empty())
+                .stream().findFirst().orElseThrow();
 
         ExtractableResponse<Response> response =
                 given()

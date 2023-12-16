@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findAllExpired(LocalDateTime dateTimeLTDelete, Pageable pageable) {
-        return userRepository.findAllByIsActualFalseAndWhenDeletedTimeLessThan(dateTimeLTDelete, pageable);
+        return userRepository.findAllByIsActualFalseAndWhenDeletedTimeLessThan(dateTimeLTDelete, pageable).orElse(Page.empty());
     }
 
     @Override
