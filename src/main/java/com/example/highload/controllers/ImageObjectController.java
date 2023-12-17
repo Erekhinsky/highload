@@ -24,7 +24,7 @@ public class ImageObjectController {
 
     @PreAuthorize("hasAuthority('CLIENT')")
     @PostMapping("/add/order/{orderId}")
-    public ResponseEntity addImagesToOrder(@Valid @RequestBody List<ImageDto> imageDtos, @PathVariable int orderId) {
+    public ResponseEntity<?> addImagesToOrder(@Valid @RequestBody List<ImageDto> imageDtos, @PathVariable int orderId) {
         imageService.saveImagesForOrder(imageDtos, orderId);
         return ResponseEntity.ok("Images added");
     }

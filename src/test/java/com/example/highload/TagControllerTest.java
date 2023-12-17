@@ -151,7 +151,6 @@ public class TagControllerTest {
                         .post("/api/tag/save")
                         .then()
                         .extract();
-        // TODO Change 500 to 400
         Assertions.assertAll(
                 () -> Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.response().getStatusCode())
         );
@@ -255,7 +254,7 @@ public class TagControllerTest {
 
         int tagId = tagRepository.findByName(tagName).orElseThrow().getId();
         Pageable pageable = PageRequest.of(0, 50);
-        int orderId = orderRepository.findAllByTags_Id(tagId, pageable).get().findFirst().orElseThrow().getId();
+        int orderId = orderRepository.findAllByTags_Id(tagId, pageable).orElseThrow().get().findFirst().orElseThrow().getId();
 
         ExtractableResponse<Response> response =
                 given()
@@ -269,7 +268,7 @@ public class TagControllerTest {
         Assertions.assertAll(
                 () -> Assertions.assertEquals(HttpStatus.OK.value(), response.response().getStatusCode()),
                 () -> Assertions.assertThrows(NoSuchElementException.class, () -> {
-                            ClientOrder clientOrder = orderRepository.findAllByTags_Name(tagName, pageable).stream().findFirst().orElseThrow();
+                            ClientOrder clientOrder = orderRepository.findAllByTags_Name(tagName, pageable).orElseThrow().stream().findFirst().orElseThrow();
                         }
                 )
         );
@@ -308,7 +307,7 @@ public class TagControllerTest {
 
         int tagId = tagRepository.findByName(tagName).orElseThrow().getId();
         Pageable pageable = PageRequest.of(0, 50);
-        int orderId = orderRepository.findAllByTags_Id(tagId, pageable).get().findFirst().orElseThrow().getId();
+        int orderId = orderRepository.findAllByTags_Id(tagId, pageable).orElseThrow().get().findFirst().orElseThrow().getId();
 
         ExtractableResponse<Response> response =
                 given()

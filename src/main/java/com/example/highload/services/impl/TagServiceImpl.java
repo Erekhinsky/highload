@@ -36,7 +36,7 @@ public class TagServiceImpl implements TagService {
     public void removeTagFromOrder(int tagId, int orderId) {
         Tag tagToRemove = tagRepository.findById(tagId).orElseThrow();
         ClientOrder order = orderRepository.findById(orderId).orElseThrow();
-        order.setTags(order.getTags().stream().filter(tag -> tag.getId()!=tagId).toList());
+        order.setTags(new ArrayList<Tag>(order.getTags().stream().filter(tag -> tag.getId()!=tagId).toList()));
         orderRepository.save(order);
     }
 

@@ -266,17 +266,4 @@ public class ImageObjectAPITests {
 
     }
 
-
-    @Test
-    @Order(4)
-    public void addImagesToOrder() {
-        /* TODO: implement, RUN */
-    }
-
-    @Test
-    @Order(5)
-    public void removeImageForOrder() {
-        /* TODO: implement, RUN */
-    }
-
 }

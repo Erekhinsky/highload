@@ -97,7 +97,7 @@ public class ProfileAPITests {
 
     @Test
     @Order(1)
-    public void editProfile() { /* TODO: RUN (+) */
+    public void editProfile() {
 
         User artist1 = userRepository.findByLogin("artist1").orElseThrow();
 
