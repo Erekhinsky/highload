@@ -31,7 +31,7 @@ public class ImageObjectController {
 
     @PreAuthorize("hasAuthority('ARTIST')")
     @PostMapping("/add/profile")
-    public ResponseEntity addImagesToProfile(@Valid @RequestBody List<ImageDto> imageDtos) {
+    public ResponseEntity<?> addImagesToProfile(@Valid @RequestBody List<ImageDto> imageDtos) {
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         int profileId = userService.findByLoginElseNull(login).getProfile().getId();
         imageService.saveImageForProfile(imageDtos, profileId);
@@ -39,7 +39,7 @@ public class ImageObjectController {
     }
 
     @PostMapping("/change/profile")
-    public ResponseEntity changeMainImageOfProfile(@Valid @RequestBody ImageDto imageDto) {
+    public ResponseEntity<?> changeMainImageOfProfile(@Valid @RequestBody ImageDto imageDto) {
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         int profileId = userService.findByLoginElseNull(login).getProfile().getId();
         imageService.changeMainImageOfProfile(imageDto, profileId);
@@ -48,14 +48,14 @@ public class ImageObjectController {
 
     @PreAuthorize("hasAuthority('CLIENT')")
     @PostMapping("/remove/order/{orderId}/{imageId}")
-    public ResponseEntity removeImageForOrder(@PathVariable int imageId, @PathVariable int orderId) {
+    public ResponseEntity<?> removeImageForOrder(@PathVariable int imageId, @PathVariable int orderId) {
         imageService.removeImageForOrder(imageId, orderId);
         return ResponseEntity.ok("Image removed");
     }
 
     @PreAuthorize("hasAuthority('ARTIST')")
     @PostMapping("/remove/profile/{imageId}")
-    public ResponseEntity removeImageForProfile(@PathVariable int imageId) {
+    public ResponseEntity<?> removeImageForProfile(@PathVariable int imageId) {
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         int profileId = userService.findByLoginElseNull(login).getProfile().getId();
         imageService.removeImageForProfile(imageId, profileId);
@@ -63,12 +63,12 @@ public class ImageObjectController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions() {
+    public ResponseEntity<?> handleValidationExceptions() {
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions() {
+    public ResponseEntity<?> handleServiceExceptions() {
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 

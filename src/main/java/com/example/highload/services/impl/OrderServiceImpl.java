@@ -5,7 +5,6 @@ import com.example.highload.model.inner.ClientOrder;
 import com.example.highload.model.inner.Tag;
 import com.example.highload.model.network.OrderDto;
 import com.example.highload.repos.OrderRepository;
-import com.example.highload.repos.TagRepository;
 import com.example.highload.services.OrderService;
 import com.example.highload.services.TagService;
 import com.example.highload.utils.DataTransformer;
@@ -15,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -104,6 +105,5 @@ public class OrderServiceImpl implements OrderService {
         order.setTags(newTagList);
         orderRepository.save(order);
         return order;
-
     }
 }

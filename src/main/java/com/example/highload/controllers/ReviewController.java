@@ -34,7 +34,7 @@ public class ReviewController {
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('CLIENT')")
-    public ResponseEntity save(@Valid @RequestBody ReviewDto data){
+    public ResponseEntity<?> save(@Valid @RequestBody ReviewDto data){
         if(reviewService.saveReview(data) != null)
             return ResponseEntity.ok("");
         else return ResponseEntity.badRequest().body("Couldn't save review, check data");
@@ -42,7 +42,7 @@ public class ReviewController {
 
     @GetMapping("/all/{profileId}/{page}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
-    public ResponseEntity getAllByProfile(@PathVariable int profileId, @PathVariable int page) {
+    public ResponseEntity<?> getAllByProfile(@PathVariable int profileId, @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Profile entity = profileService.findById(profileId);
         Page<Review> entityList = reviewService.findAllProfileReviews(profileId, pageable);
@@ -53,19 +53,19 @@ public class ReviewController {
 
     @GetMapping("/single/{id}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
-    public ResponseEntity getById(@PathVariable int id){
+    public ResponseEntity<?> getById(@PathVariable int id){
         Review entity = reviewService.findById(id);
         ReviewDto reviewDto = dataTransformer.reviewToDto(entity);
         return ResponseEntity.ok(reviewDto);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions(){
+    public ResponseEntity<?> handleValidationExceptions(){
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions(){
+    public ResponseEntity<?> handleServiceExceptions(){
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 }

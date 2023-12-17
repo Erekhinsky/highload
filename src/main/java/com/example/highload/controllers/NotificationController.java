@@ -29,7 +29,7 @@ public class NotificationController {
     private final DataTransformer dataTransformer;
 
     @PostMapping("/save")
-    public ResponseEntity save(@Valid @RequestBody NotificationDto data){
+    public ResponseEntity<?> save(@Valid @RequestBody NotificationDto data){
         if(notificationService.saveNotification(data) != null)
             return ResponseEntity.ok("Notification successfully created");
         else return ResponseEntity.badRequest().body("Couldn't save notification, check data");
@@ -37,7 +37,7 @@ public class NotificationController {
 
     @PostMapping("/update/{id}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
-    public ResponseEntity setRead(@PathVariable int id){
+    public ResponseEntity<?> setRead(@PathVariable int id){
         if(notificationService.readNotification(id) != null)
             return ResponseEntity.ok("Notification status is set");
         else return ResponseEntity.badRequest().body("Couldn't change notification, check data");
@@ -45,7 +45,7 @@ public class NotificationController {
 
     @GetMapping("/all/{userId}/{page}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
-    public ResponseEntity getAllQueries(@PathVariable int userId, @PathVariable int page) {
+    public ResponseEntity<?> getAllQueries(@PathVariable int userId, @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Page<Notification> entityList = notificationService.getAllUserNotifications(userId,pageable);
         List<NotificationDto> dtoList = dataTransformer.notificationListToDto(entityList.getContent());
@@ -56,7 +56,7 @@ public class NotificationController {
 
     @GetMapping("/new/{userId}/{page}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
-    public ResponseEntity getNewQueries(@PathVariable int userId, @PathVariable int page) {
+    public ResponseEntity<?> getNewQueries(@PathVariable int userId, @PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Page<Notification> entityList = notificationService.getNewUserNotifications(userId, pageable);
         List<NotificationDto> dtoList = dataTransformer.notificationListToDto(entityList.getContent());
@@ -65,12 +65,12 @@ public class NotificationController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions(){
+    public ResponseEntity<?> handleValidationExceptions(){
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions(){
+    public ResponseEntity<?> handleServiceExceptions(){
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 }

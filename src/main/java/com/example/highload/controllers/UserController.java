@@ -4,7 +4,6 @@ import com.example.highload.model.network.JwtResponse;
 import com.example.highload.model.network.ProfileDto;
 import com.example.highload.model.network.UserDto;
 import com.example.highload.model.network.UserRequestDto;
-import com.example.highload.security.jwt.JwtUtil;
 import com.example.highload.services.AuthenticationService;
 import com.example.highload.services.ProfileService;
 import com.example.highload.services.UserService;
@@ -12,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/profile/add/{userId}")
-    public ResponseEntity addProfile(@Valid @RequestBody ProfileDto profile, @PathVariable int userId) {
+    public ResponseEntity<?> addProfile(@Valid @RequestBody ProfileDto profile, @PathVariable int userId) {
 
         if (profileService.findByUserIdElseNull(userId) == null) {
             profileService.saveProfileForUser(profile, userId);
@@ -68,12 +66,12 @@ public class UserController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions() {
+    public ResponseEntity<?> handleValidationExceptions() {
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions() {
+    public ResponseEntity<?> handleServiceExceptions() {
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 

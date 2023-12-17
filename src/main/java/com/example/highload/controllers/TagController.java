@@ -30,14 +30,14 @@ public class TagController {
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity save(@Valid @RequestBody TagDto data) {
+    public ResponseEntity<?> save(@Valid @RequestBody TagDto data) {
         if (tagService.saveTag(data) != null)
             return ResponseEntity.ok("Tag successfully created");
         else return ResponseEntity.badRequest().body("Couldn't save tag, check data");
     }
 
     @GetMapping("/all/{page}")
-    public ResponseEntity getAll(@PathVariable int page) {
+    public ResponseEntity<?> getAll(@PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Page<Tag> entityList = tagService.findAll(pageable);
         List<TagDto> dtoList = dataTransformer.tagListToDto(entityList.getContent());
@@ -46,23 +46,23 @@ public class TagController {
     }
 
     @PostMapping("/remove/{orderId}/{tagId}")
-    public ResponseEntity removeTagFromOrder(@PathVariable int orderId, @PathVariable int tagId) {
+    public ResponseEntity<?> removeTagFromOrder(@PathVariable int orderId, @PathVariable int tagId) {
         tagService.removeTagFromOrder(tagId, orderId);
         return ResponseEntity.ok("Tag successfully removed from order");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions() {
+    public ResponseEntity<?> handleValidationExceptions() {
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions() {
+    public ResponseEntity<?> handleServiceExceptions() {
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity handlePathExceptions() {
+    public ResponseEntity<?> handlePathExceptions() {
         return ResponseEntity.badRequest().body("Wrong pages or ids in path!");
     }
 

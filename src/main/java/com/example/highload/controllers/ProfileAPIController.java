@@ -10,7 +10,6 @@ import com.example.highload.utils.DataTransformer;
 import com.example.highload.utils.PaginationHeadersCreator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.descriptor.web.ContextHandler;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,14 +40,14 @@ public class ProfileAPIController {
 //    }
 
     @PostMapping("/edit")
-    public ResponseEntity edit(@Valid @RequestBody ProfileDto data){
+    public ResponseEntity<?> edit(@Valid @RequestBody ProfileDto data) {
         String login = SecurityContextHolder.getContext().getAuthentication().getName();
         profileService.editProfile(data, userService.findByLoginElseNull(login).getProfile().getId());
         return ResponseEntity.ok("Profile edited");
     }
 
     @GetMapping("/all/{page}")
-    public ResponseEntity getAll(@PathVariable int page){
+    public ResponseEntity<?> getAll(@PathVariable int page) {
         Pageable pageable = PageRequest.of(page, 50);
         Page<Profile> entityList = profileService.findAllProfiles(pageable);
         List<ProfileDto> dtoList = dataTransformer.profileListToDto(entityList.getContent());
@@ -57,13 +56,13 @@ public class ProfileAPIController {
     }
 
     @GetMapping("/single/{id}")
-    public ResponseEntity getById(@PathVariable int id){
+    public ResponseEntity<?> getById(@PathVariable int id) {
         Profile entity = profileService.findById(id);
         return ResponseEntity.ok(dataTransformer.profileToDto(entity));
     }
 
     @GetMapping("/single/{id}/images/{page}")
-    public ResponseEntity getProfileImagesByIdAndPageNumber(@PathVariable int id, @PathVariable int page){
+    public ResponseEntity<?> getProfileImagesByIdAndPageNumber(@PathVariable int id, @PathVariable int page) {
         Profile entity = profileService.findById(id);
         Pageable pageable = PageRequest.of(page, 50);
         Page<Image> images = imageService.findAllProfileImages(id, pageable);
@@ -72,12 +71,12 @@ public class ProfileAPIController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions(){
+    public ResponseEntity<?> handleValidationExceptions() {
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions(){
+    public ResponseEntity<?> handleServiceExceptions() {
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 

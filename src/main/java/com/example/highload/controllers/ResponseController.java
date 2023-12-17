@@ -29,7 +29,7 @@ public class ResponseController {
     private final DataTransformer dataTransformer;
 
     @PostMapping("/save")
-    public ResponseEntity save(@Valid @RequestBody ResponseDto data){
+    public ResponseEntity<?> save(@Valid @RequestBody ResponseDto data){
         if(responseService.saveResponse(data) != null)
             return ResponseEntity.ok("Response added");
         else return ResponseEntity.badRequest().body("Couldn't save response, check data");
@@ -37,7 +37,7 @@ public class ResponseController {
 
     @GetMapping("/all/order/{orderId}/{page}")
     @PreAuthorize("hasAnyAuthority('ARTIST', 'CLIENT')")
-    public ResponseEntity getAllByOrder(@PathVariable int orderId, @PathVariable int page){
+    public ResponseEntity<?> getAllByOrder(@PathVariable int orderId, @PathVariable int page){
         Pageable pageable = PageRequest.of(page, 50);
         Page<Response> entityList = responseService.findAllForOrder(orderId, pageable);
         List<ResponseDto> dtoList = dataTransformer.responseListToDto(entityList.getContent());
@@ -47,7 +47,7 @@ public class ResponseController {
 
     @GetMapping("/all/user/{userId}/{page}")
     @PreAuthorize("hasAnyAuthority('ARTIST')")
-    public ResponseEntity getAllByUser(@PathVariable int userId, @PathVariable int page){
+    public ResponseEntity<?> getAllByUser(@PathVariable int userId, @PathVariable int page){
         Pageable pageable = PageRequest.of(page, 50);
         Page<Response> entityList = responseService.findAllForUser(userId, pageable);
         List<ResponseDto> dtoList = dataTransformer.responseListToDto(entityList.getContent());
@@ -57,18 +57,18 @@ public class ResponseController {
 
     @GetMapping("/single/{id}")
     @PreAuthorize("hasAnyAuthority('CLIENT', 'ARTIST')")
-    public ResponseEntity getById(@PathVariable int id){
+    public ResponseEntity<?> getById(@PathVariable int id){
         Response entity = responseService.findById(id);
         return ResponseEntity.ok(dataTransformer.responseToDto(entity));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity handleValidationExceptions(){
+    public ResponseEntity<?> handleValidationExceptions(){
         return ResponseEntity.badRequest().body("Request body validation failed!");
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity handleServiceExceptions(){
+    public ResponseEntity<?> handleServiceExceptions(){
         return ResponseEntity.badRequest().body("Wrong ids in path!");
     }
 
