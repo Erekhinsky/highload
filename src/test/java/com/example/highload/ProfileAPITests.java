@@ -126,7 +126,7 @@ public class ProfileAPITests {
                         .and()
                         .body(artistProfileDto)
                         .when()
-                        .post("/api/profile/edit/" + artistProfileWithId.getId())
+                        .post("/api/profile/edit")
                         .then()
                         .extract();
 
@@ -150,7 +150,7 @@ public class ProfileAPITests {
                         .and()
                         .body(artistProfileDto)
                         .when()
-                        .post("/api/profile/edit/" + artistProfileWithId.getId())
+                        .post("/api/profile/edit")
                         .then()
                         .extract();
 
