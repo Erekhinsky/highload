@@ -4,6 +4,7 @@ import com.example.highload.model.network.JwtResponse;
 import com.example.highload.model.network.ProfileDto;
 import com.example.highload.model.network.UserDto;
 import com.example.highload.model.network.UserRequestDto;
+import com.example.highload.security.jwt.JwtUtil;
 import com.example.highload.services.AuthenticationService;
 import com.example.highload.services.ProfileService;
 import com.example.highload.services.UserService;
@@ -11,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +34,8 @@ public class UserController {
         if (user.getLogin() == null || user.getPassword() == null) {
             return new ResponseEntity<>("Absent login or password", HttpStatus.BAD_REQUEST);
         }
-        JwtResponse response = JwtResponse.builder().token(authenticationService.authProcess(user.getLogin(), user.getPassword(), user.getRole().toString())).build();
+        JwtResponse response = JwtResponse.builder().token(authenticationService.authProcess(user.getLogin(), user.getPassword(),
+                user.getRole().toString())).userId(userService.findByLoginElseNull(user.getLogin()).getId()).build();
         return ResponseEntity.ok(response);
     }
 
