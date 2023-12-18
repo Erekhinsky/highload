@@ -66,7 +66,7 @@ public class DataTransformer {
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setId(review.getId());
         reviewDto.setText(review.getText());
-        reviewDto.setUserName(review.getProfile().getUser().getLogin());
+        reviewDto.setUserName(review.getUser().getUsername());
         reviewDto.setProfileId(review.getProfile().getId());
         return reviewDto;
     }
@@ -76,6 +76,7 @@ public class DataTransformer {
         review.setId(reviewDto.getId());
         review.setText(reviewDto.getText());
         Profile profile = profileRepository.findById(reviewDto.getProfileId()).orElseThrow();
+        review.setUser(userRepository.findByLogin(reviewDto.getUserName()).orElseThrow());
         review.setProfile(profile);
         return review;
     }

@@ -20,4 +20,8 @@ public class Review {
     @NotBlank
     @Column(name = "text", nullable = false)
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

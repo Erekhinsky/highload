@@ -569,6 +569,30 @@ databaseChangeLog:
                   value: CLIENT
             dbms: 'postgresql'
   - changeSet:
+      id: 16
+      author: abogatov
+      changes:
+        - addColumn:
+            tableName: review
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: review
+            baseTableSchemaName: public
+            constraintName: fk_review_user
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: user
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
       id: -1
       author: sofia
       changes:

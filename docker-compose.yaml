@@ -20,23 +20,23 @@ services:
       start_period: 10s
     restart: unless-stopped
 
-#  liquibase:
-#    image: liquibase/liquibase:4.9.1
-#    container_name: liquibase
-#    depends_on:
-#      db:
-#        condition: service_healthy
-#    volumes:
-#      - ./src/main/resources/db/changelog/:/liquibase/db/changelog/
-#    command: [
-#      /liquibase/liquibase,
-#      --username=high_user,
-#      --password=high_user,
-#      --driver=org.postgresql.Driver,
-#      --url=jdbc:postgresql://db:5432/highload,
-#      --changeLogFile=db/changelog/db.changelog-master.yaml,
-#      update,
-#    ]
+  liquibase:
+    image: liquibase/liquibase:4.9.1
+    container_name: liquibase
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src/main/resources/db/changelog/:/liquibase/db/changelog/
+    command: [
+      /liquibase/liquibase,
+      --username=high_user,
+      --password=high_user,
+      --driver=org.postgresql.Driver,
+      --url=jdbc:postgresql://db:5432/highload,
+      --changeLogFile=db/changelog/db.changelog-master.yaml,
+      update,
+    ]
   app:
     image: 'highload.jar'
     ports:

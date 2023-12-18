@@ -95,13 +95,13 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(value = Transactional.TxType.REQUIRES_NEW, rollbackOn = {NoSuchElementException.class, Exception.class})
     public ClientOrder deleteTagsFromOrder(List<Integer> tagIds, int orderId) {
         ClientOrder order = orderRepository.findById(orderId).orElseThrow();
-        List<Integer> oldTagIds = order.getTags().stream().map(Tag::getId).toList();
+        List<Integer> oldTagIds = new ArrayList<>(order.getTags().stream().map(Tag::getId).toList());
         for (Integer tagIdToDelete : tagIds) {
             if (!oldTagIds.contains(tagIdToDelete)) {
                 return null;
             }
         }
-        List<Tag> newTagList = order.getTags().stream().filter(tag -> !tagIds.contains(tag.getId())).toList();
+        List<Tag> newTagList = new ArrayList<>(order.getTags().stream().filter(tag -> !tagIds.contains(tag.getId())).toList());
         order.setTags(newTagList);
         orderRepository.save(order);
         return order;
