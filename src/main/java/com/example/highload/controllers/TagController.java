@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.postgresql.util.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -64,6 +65,11 @@ public class TagController {
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<?> handlePathExceptions() {
         return ResponseEntity.badRequest().body("Wrong pages or ids in path!");
+    }
+
+    @ExceptionHandler(PSQLException.class)
+    public ResponseEntity<?> handlePSQLException(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
 

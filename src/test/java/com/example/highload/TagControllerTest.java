@@ -152,7 +152,7 @@ public class TagControllerTest {
                         .then()
                         .extract();
         Assertions.assertAll(
-                () -> Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.response().getStatusCode())
+                () -> Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.response().getStatusCode())
         );
     }
 
