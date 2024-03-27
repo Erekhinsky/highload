@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class HighloadApplication {
     public static void main(String[] args) {
         SpringApplication.run(HighloadApplication.class, args);
+        System.out.println("Test");
     }
 }
 
