@@ -1,5 +1,6 @@
-# Highload Spring APP
-The project was forked and continued. <br />
+# Высоконагруженные системы - Spring APP <br />
+Площадка для поиска заказчиками художников с опубликованными работами 
+Проект был форкнут и продолжен: 
 [https://github.com/albogatov/highload2](https://github.com/albogatov/highload2.git) <br />
-Then: <br />
+Потом: 
 [https://github.com/albogatov/artservice](https://github.com/albogatov/artservice.git) <br />
